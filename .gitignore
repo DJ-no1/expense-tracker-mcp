@@ -100,3 +100,6 @@ $RECYCLE.BIN/
 # *.jpg
 # *.jpeg
 # image.png
+expenses.db
+*.db
+

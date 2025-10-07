@@ -27,15 +27,220 @@ A Model Context Protocol (MCP) server for tracking and managing personal expense
 
 ## 📁 Project Structure
 
-```
+````
 expense-tracker-mcp/
 ├── main.py              # Main MCP server implementation
 ├── pyproject.toml       # Project dependencies and metadata
 ├── categories.json      # Expense categories and subcategories
 ├── expenses.db          # SQLite database (auto-created)
 ├── uv.lock             # Lock file for dependencies
-└── README.md           # This file
+└── # Expense Tracker MCP Server
+
+A comprehensive Model Context Protocol (MCP) server for tracking expenses, managing income, setting budgets, and analyzing your financial health. Use it directly in Claude Desktop or any MCP-compatible client.
+
+## Features
+
+### 💰 Expense Tracking
+- **Add single expenses** with category, subcategory, and notes
+- **Add multiple expenses at once** for batch entry
+- **List expenses** within date ranges
+- **Update or delete expenses** as needed
+- **Categorize expenses** with 20+ predefined categories
+
+### 📈 Income Tracking
+- **Add income entries** from various sources (salary, freelance, investments, etc.)
+- **Add multiple income entries** at once
+- **List income** within date ranges
+- **Track income sources** with detailed categorization
+
+### 🎯 Budget Management
+- **Set monthly budgets** for expense categories
+- **Check budget status** with real-time spending tracking
+- **Budget warnings** when approaching limits (90%+)
+- **Over-budget alerts** to keep spending in check
+- **List all active budgets** at a glance
+
+### 📊 Financial Analytics
+- **Financial summary** showing total income, expenses, and balance
+- **Spending trends** analysis by day, week, or month
+- **Category-wise breakdowns** for both income and expenses
+- **Percentage-based insights** for budget utilization
+
+## Available Tools
+
+### Expense Management
+- `add_expense(date, amount, category, subcategory, note)` - Add a single expense
+- `add_multiple_expenses(expenses)` - Add multiple expenses at once
+- `list_expenses(start_date, end_date)` - List expenses in date range
+- `update_expense(expense_id, ...)` - Update an existing expense
+- `delete_expense(expense_id)` - Delete an expense
+- `summarize(start_date, end_date, category)` - Summarize expenses by category
+
+### Income Management
+- `add_income(date, amount, source, note)` - Add a single income entry
+- `add_multiple_income(income_entries)` - Add multiple income entries at once
+- `list_income(start_date, end_date)` - List income in date range
+- `delete_income(income_id)` - Delete an income entry
+
+### Budget Management
+- `set_budget(category, monthly_limit, start_date, end_date)` - Set or update a budget
+- `check_budget(category, start_date, end_date)` - Check budget status
+- `list_budgets()` - List all active budgets
+
+### Financial Analysis
+- `financial_summary(start_date, end_date)` - Get comprehensive financial overview
+- `get_spending_trends(start_date, end_date, group_by)` - Analyze spending patterns
+
+## Database Schema
+
+### Expenses Table
+```sql
+CREATE TABLE expenses(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+    amount REAL NOT NULL,
+    category TEXT NOT NULL,
+    subcategory TEXT DEFAULT '',
+    note TEXT DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+````
+
+### Income Table
+
+```sql
+CREATE TABLE income(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+    amount REAL NOT NULL,
+    source TEXT NOT NULL,
+    note TEXT DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
 ```
+
+### Budgets Table
+
+```sql
+CREATE TABLE budgets(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL,
+    monthly_limit REAL NOT NULL,
+    start_date TEXT NOT NULL,
+    end_date TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(category, start_date)
+)
+```
+
+## Installation
+
+1. Install dependencies:
+
+```bash
+uv sync
+```
+
+2. Install the MCP server in Claude Desktop:
+
+```bash
+uv run fastmcp install claude-desktop main.py
+```
+
+3. Restart Claude Desktop to load the server
+
+## Usage Examples
+
+### In Claude Desktop
+
+**Add an expense:**
+
+> "Add an expense of $50 for groceries on 2025-01-15"
+
+**Add multiple expenses:**
+
+> "Add these expenses: $30 for coffee on Jan 10, $100 for gas on Jan 11, and $25 for lunch on Jan 12"
+
+**Track income:**
+
+> "I received $5000 salary on January 1st and $500 from freelance work on January 15th"
+
+**Set a budget:**
+
+> "Set a monthly budget of $500 for food category starting from January 2025"
+
+**Check budget:**
+
+> "How much of my food budget have I used this month?"
+
+**Get financial summary:**
+
+> "Show me my financial summary for January 2025 - how much did I earn and spend?"
+
+**Analyze spending trends:**
+
+> "What are my spending trends for the last 3 months, grouped by month?"
+
+## Categories
+
+The server includes 20+ expense categories:
+
+- 🍔 Food
+- 🚗 Transport
+- 🏠 Housing
+- 💡 Utilities
+- 🏥 Health
+- 📚 Education
+- 👨‍👩‍👧‍👦 Family & Kids
+- 🎬 Entertainment
+- 🛍️ Shopping
+- 📱 Subscriptions
+- 💆 Personal Care
+- 🎁 Gifts & Donations
+- 💳 Finance & Fees
+- 💼 Business
+- ✈️ Travel
+- 🏡 Home
+- 🐾 Pets
+- 📋 Taxes
+- 📊 Investments
+- 📦 Miscellaneous
+
+### Income Sources
+
+- Salary
+- Freelance
+- Business
+- Investments
+- Dividends
+- Interest
+- Rental
+- Refund
+- Gift
+- Bonus
+- Commission
+- Side Hustle
+- Consulting
+- Royalties
+- Other
+
+## Data Storage
+
+All data is stored locally in `expenses.db` SQLite database in the project directory. Your financial data never leaves your machine.
+
+## Development
+
+Run the server locally:
+
+```bash
+uv run main.py
+```
+
+## License
+
+MIT License - Feel free to use and modify as needed! # This file
+
+````
 
 ## 🔧 Prerequisites
 
@@ -53,7 +258,7 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 # On macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+````
 
 ### Step 2: Create Project Folder
 
